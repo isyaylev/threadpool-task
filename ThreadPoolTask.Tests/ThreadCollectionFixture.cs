@@ -3,9 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ThreadPoolTask.Tests
 {
@@ -67,7 +65,7 @@ namespace ThreadPoolTask.Tests
         [Description("КОнкурентные потоки опустошают очередь")]
         public void CorrectResultTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
             var expectedList = new List<int>();
 
             SetupTest((item) => { resultingList.Add(item); Thread.Sleep(100); });
@@ -87,15 +85,16 @@ namespace ThreadPoolTask.Tests
                 Assert.IsTrue(addResult);
             }
 
-            resultingList.Sort();
-            Assert.AreEqual(expectedList.Aggregate(string.Empty, (res, i) => res + i), resultingList.Aggregate(string.Empty, (res, i) => res + i));
+            var finalList = new List<int>(resultingList);
+            finalList.Sort();
+            Assert.AreEqual(expectedList.Aggregate(string.Empty, (res, i) => res + i), finalList.Aggregate(string.Empty, (res, i) => res + i));
         }
 
         [TestMethod]
         [Description("Нельзя добавить потоков больше определённого количества")]
         public void CannotAddThreadTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
             SetupTest((item) => { resultingList.Add(item); });
 
             using (threadCollection = new ThreadCollection(new SimpleThreadPoolSettings(1)))
@@ -112,7 +111,7 @@ namespace ThreadPoolTask.Tests
         [Description("Нельзя удалить потоков больше определённого количества")]
         public void CannotRemoveThreadTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
             SetupTest((item) => { resultingList.Add(item); });
 
             using (threadCollection = new ThreadCollection(new SimpleThreadPoolSettings(1)))
@@ -133,7 +132,7 @@ namespace ThreadPoolTask.Tests
         [Description("Удаляем работающие потоки, и следим за тем, что бы их работа выполнилась до выхода из Dispose")]
         public void RemoveThreadTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
             var expectedList = new List<int>();
 
             SetupTest((item) => { Thread.Sleep(1000); resultingList.Add(item); });

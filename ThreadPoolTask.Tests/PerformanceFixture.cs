@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -45,7 +46,7 @@ namespace ThreadPoolTask.Tests
         [Description("Балансер уменьшает количество потоков, после чего пул продолжает быть работоспособным")]
         public void RemoveThreadsTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
             var expectedList = new List<int>();
 
             var creator = new SimpleThreadPoolCreator(
@@ -94,7 +95,7 @@ namespace ThreadPoolTask.Tests
         [Description("Балансер увеличит количество потоков, после чего пул продолжает быть работоспособным")]
         public void AddThreadsTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
             var expectedList = new List<int>();
 
             var creator = new SimpleThreadPoolCreator(

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using System.Collections.Generic;
@@ -43,7 +44,7 @@ namespace ThreadPoolTask.Tests
         [Description("Рабочий поток обрабатывает все элементы в правильном порядке и дожидается завершение всех потоков")]
         public void CorrectResultTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
             var expectedList = new List<int>();
 
             using (var threadPool = (new SimpleThreadPoolCreator()).Create())

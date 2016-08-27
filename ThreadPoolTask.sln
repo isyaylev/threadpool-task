@@ -8,6 +8,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{A7113C8C-C5D8-4398-98B0-AE31E55AC3D0}"
 	ProjectSection(SolutionItems) = preProject
 		Пояснительная записка.docx = Пояснительная записка.docx
+		Тестовое задание ThreadPool.docx = Тестовое задание ThreadPool.docx
 	EndProjectSection
 EndProject
 Global

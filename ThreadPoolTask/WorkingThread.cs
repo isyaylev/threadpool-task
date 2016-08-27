@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ThreadPoolTask
 {
@@ -75,8 +71,20 @@ namespace ThreadPoolTask
                 {
                     isProcessing = true;
 
-                    workItem.ExecuteWorkItem();
+                    try
+                    {
+                        workItem.ExecuteWorkItem();
+                    }
+                    catch (Exception)
+                    {
+                        // а вот здесь вопрос - а что же делать если пользовательский код выбросил исключение?
+                        // 1) в стандартном System.Threading предусмотрен спец. event, 2) можно было бы писать 
+                        // исключение в лог.
+                        // Так как это тестовое задание - мы просто проглатываем исключение
+                    }
 
+                    // слово volatile при описании поля не требуется, т.к. в данном случае оптимизатор не будет 
+                    // кешировать значение поля в регистрах процессора
                     isProcessing = false;
                 }
             }

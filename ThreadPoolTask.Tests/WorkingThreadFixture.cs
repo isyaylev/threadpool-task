@@ -3,9 +3,7 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace ThreadPoolTask.Tests
 {
@@ -75,7 +73,7 @@ namespace ThreadPoolTask.Tests
         [Description("Рабочий поток обрабатывает все элементы в правильном порядке")]
         public void CorrectResultTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
             var expectedList = new List<int>();
 
             SetupTest((item) => resultingList.Add(item));
@@ -90,14 +88,17 @@ namespace ThreadPoolTask.Tests
 
             Thread.Sleep(100);
 
-            Assert.AreEqual(expectedList.Aggregate(string.Empty, (res, i) => res + i), resultingList.Aggregate(string.Empty, (res, i) => res + i));
+            var finalList = new List<int>(resultingList);
+            finalList.Sort();
+
+            Assert.AreEqual(expectedList.Aggregate(string.Empty, (res, i) => res + i), finalList.Aggregate(string.Empty, (res, i) => res + i));
         }
 
         [TestMethod]
         [Description("При вызове CompleteAdding рабочий поток дообрабатывает сообщения и прекращает работу")]
         public void CompleteAddingTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
 
             SetupTest((item) => resultingList.Add(item));
 
@@ -113,7 +114,7 @@ namespace ThreadPoolTask.Tests
         [Description("При вызове Cancel рабочий поток доделывает текущую задачу и прекращает работу")]
         public void CancellationTest()
         {
-            var resultingList = new List<int>();
+            var resultingList = new ConcurrentBag<int>();
 
             SetupTest((item) => { Thread.Sleep(500); resultingList.Add(item); });
 
@@ -134,8 +135,6 @@ namespace ThreadPoolTask.Tests
         [TestMethod]
         public void JoinNormalTest()
         {
-            var resultingList = new List<int>();
-
             SetupTest((item) => Thread.Sleep(1000));
 
             queue.Add(1);

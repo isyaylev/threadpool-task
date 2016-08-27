@@ -1,13 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Xml;
 using System.Collections.Concurrent;
-using System.Security;
-using System.Diagnostics.Contracts;
 using ThreadPoolTask.Performance;
 
 namespace ThreadPoolTask
